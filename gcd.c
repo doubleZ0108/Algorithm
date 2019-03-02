@@ -39,3 +39,48 @@ int gcd_enum(int m, int n)
 
 	return i;
 }
+
+/*将整数index分解为质因数的乘积*/
+void decompose(vector<int> &seq, int index)
+{
+	int n = index;	//要提前储存index,否则循环条件会一点点缩小
+
+	for (int i = 2; i <= sqrt(index) + 1; ++i)
+	{
+		while (n%i == 0)
+		{
+			seq.push_back(i);
+			n /= i;
+		}
+	}
+
+	//如果index本身即为素数或1, 分解的质因数集合中则只有它自己
+	if (seq.empty()) { seq.push_back(index); }
+}
+
+/*提取共同的质因数*/
+int gcd_decompose(int m, int n)
+{
+	//n为0特殊考虑
+	if (n == 0) { return m; }
+
+	vector<int> seqm, seqn;
+	decompose(seqm, m);
+	decompose(seqn, n);
+
+	//找出所有的公共质因数并做乘积
+	int gcd = 1;
+	vector<int>::iterator iterm = seqm.begin(), itern = seqn.begin();
+	while (iterm != seqm.end() && itern != seqn.end())
+	{
+		if (*iterm == *itern)
+		{
+			gcd *= *iterm;
+			iterm++; itern++;
+		}
+		else if (*iterm < *itern) { iterm++; }
+		else { itern++; }
+	}
+
+	return gcd;
+}
