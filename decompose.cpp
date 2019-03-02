@@ -1,4 +1,4 @@
-//例: 18 = 2*3*3
+//例: 18 = 2*3*3  17 = 17
 
 /*将整数index分解为质因数的乘积*/
 void decompose(vector<int> &seq, int index)
@@ -13,4 +13,7 @@ void decompose(vector<int> &seq, int index)
 			n /= i;
 		}
 	}
+
+	//如果index本身即为素数或1, 分解的质因数集合中则只有它自己
+	if (seq.empty()) { seq.push_back(index); }
 }
