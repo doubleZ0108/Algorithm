@@ -54,8 +54,8 @@ void decompose(vector<int> &seq, int index)
 		}
 	}
 
-	//如果index本身即为素数或1, 分解的质因数集合中则只有它自己
-	if (seq.empty()) { seq.push_back(index); }
+	//存储最后一个数
+	seq.push_back(n);
 }
 
 /*提取共同的质因数*/
