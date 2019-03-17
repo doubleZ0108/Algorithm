@@ -13,7 +13,7 @@ Q:"一只青蛙一次可以跳上 1 级台阶，也可以跳上 2 级台阶。�
 using namespace std;
 
 /*递归算法求解跳台阶问题*/
-double JumpStairs_brutal(int n)
+long long JumpStairs_brutal(int n)
 {
 	if (n == 0) { return 0; }
 	else if (n == 1) { return 1; }
@@ -23,9 +23,9 @@ double JumpStairs_brutal(int n)
 }
 
 /*在递归算法中增加备忘录*/
-double JumpStairs_map(int n)
+long long JumpStairs_map(int n)
 {
-	static map<int, double> mymap;	//用静态图储存已经计算出来的值
+	static map<int, long long> mymap;	//用静态图储存已经计算出来的值
 
 	if (n == 0) { return 0; }
 	else if (n == 1) { return 1; }
@@ -37,20 +37,20 @@ double JumpStairs_map(int n)
 	}
 	else
 	{
-		double value= JumpStairs_map(n - 1) + JumpStairs_map(n - 2);
+		long long value= JumpStairs_map(n - 1) + JumpStairs_map(n - 2);
 		mymap[n] = value;	//将新值记录进静态图
 		return value;
 	}
 }
 
 /*迭代算法求解跳台阶问题*/
-double JumpStairs_loop(int n)
+long long JumpStairs_loop(int n)
 {
 	if (n == 0) { return 0; }
 	else if (n == 1) { return 1; }
 	else if (n == 2) { return 2; }
 
-	double Fn, Fn_1 = 1, Fn_2 = 2;
+	long long Fn, Fn_1 = 1, Fn_2 = 2;
 	for (int i = 3; i <= n; ++i)
 	{
 		Fn = Fn_1 + Fn_2;
@@ -81,21 +81,18 @@ int main(void)
 		{
 		case 1: {
 			cout << "JumpStairs_brutal算法求得跳上" << n << "级台阶共有"
-				<< setiosflags(ios::fixed) << setprecision(0)		//设置以0位小数方式输出
 				<< JumpStairs_brutal(n) << "种跳法" << endl;
 
 			break;
 		}
 		case 2: {
 			cout << "JumpStairs_map算法求得跳上" << n << "级台阶共有"
-				<< setiosflags(ios::fixed) << setprecision(0)
 				<< JumpStairs_map(n) << "种跳法" << endl;
 
 			break;
 		}
 		case 3: {
 			cout << "JumpStairs_loop算法求得跳上" << n << "级台阶共有"
-				<< setiosflags(ios::fixed) << setprecision(0)
 				<< JumpStairs_loop(n) << "种跳法" << endl;
 
 			break;
