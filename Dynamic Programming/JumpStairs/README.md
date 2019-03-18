@@ -63,6 +63,7 @@ long long JumpStairs_brutal(int n)
 ![备忘录算法的递归调用树](https://upload-images.jianshu.io/upload_images/12014150-51645c885211b711.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 因此可以设置一个静态的图结构, 将N的值作为索引, F(N)的值作为对象存储
+
 在递归调用的过程中, 先在静态表中查找该值是否曾经计算过(静态图中是否存储过): 如果图中存储过该值,则可直接返回对象值,节省重复计算浪费的时间; 否则也只需计算一次对象的值并将其加入到备忘录中
 
 ```
@@ -164,6 +165,38 @@ long long JumpStairs_loop(int n)
 对于一个i从3~N的循环,时间复杂度为O(N)
 
 由于只定义了三个临时变量,因此空间复杂度为O(1)
+
+### 出错检测
+- 输入的楼梯总数非负
+```
+/*出错检测: 楼梯总数必须非负*/
+while (cin >> n)
+{
+	if (n >= 0) { break; }
+	else { cout << "楼梯总数应非负, 请重新输入: "; }
+}
+```
+![楼梯总数为负](https://upload-images.jianshu.io/upload_images/12014150-9bb5717f3fcea9a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+- 选择的算法应为1~3号
+```
+while (true)
+	{
+		cout << endl << "请输入你想选择的算法(1普通递归算法, 2备忘录递归算法, 3迭代算法, 0结束程序): ";
+		cin >> OpCode;
+		if (!OpCode) { break; }
+
+		...
+
+		/*出错检测: 只能选择1~3号算法*/
+		default:
+			cout << "输入有误, 请重新输入(1普通递归算法, 2备忘录递归算法, 3迭代算法): ";
+			break;
+		}
+	}
+```
+![算法编号不为1~3](https://upload-images.jianshu.io/upload_images/12014150-3da09df1156352e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 ### 其他
 - 输入100时的问题
