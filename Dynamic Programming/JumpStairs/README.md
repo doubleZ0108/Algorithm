@@ -161,3 +161,18 @@ long long JumpStairs_loop(int n)
 
 ### 其他
 - 输入100时的问题
+*以迭代的算法为例*
+	- 将函数返回值及所有中间变量类型设置为long long, 运行结果如下
+	![数据量_100_long long](https://upload-images.jianshu.io/upload_images/12014150-994c1e4eaf1b58b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+	- 将函数返回值及所有中间变量类型设置为double
+	![数据量_100_double](https://upload-images.jianshu.io/upload_images/12014150-b1b3d2d9d9d8316a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+	- 将函数返回值及所有中间变量类型设置为double, 并按照0位小数输出`setiosflags(ios::fixed) << setprecision(0)`
+	![数据量_100_double_0位小数](https://upload-images.jianshu.io/upload_images/12014150-ff4a623cc427a962.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+如图可见类型为long long和类型为double并以0位小数输出的结果不一致, 而通过计算之后发现数据量100的时候, 应该超过long long类型的最大存储容量
+
+由此, double类型的值应为正确结果
+
+且数据量为90的时候, 结果有19位有效数字, 而数据量为100的时候, long long类型的算法仍是19位有效数字, 显然错误
+	
+
