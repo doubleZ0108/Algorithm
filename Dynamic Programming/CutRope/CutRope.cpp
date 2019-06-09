@@ -91,6 +91,55 @@ int maxDivide_dp(int length, vector<int> &factor)
 	return maxMulti;
 }
 
+int maxDivide_gready(int length)
+{
+	if (length == 2) { return 1; }
+	else if (length == 3) { return 2; }
+	else
+	{
+		int maxMulti, times_3, times_2;
+		times_3 = length / 3;
+
+		if (length - 3 * times_3 == 1) { times_3--; }
+
+		times_2 = (length - 3 * times_3) / 2;
+
+		maxMulti = static_cast<int>(pow(3, times_3)*pow(2, times_2));
+
+		return maxMulti;
+	}
+}
+int maxDivide_gready(int length, vector<int> &factor)
+{
+	factor.clear();
+
+	if (length == 2) 
+	{
+		factor.push_back(1);
+		return 1; 
+	}
+	else if (length == 3)
+	{
+		factor.push_back(2);
+		return 2;
+	}
+	else
+	{
+		int maxMulti, times_3, times_2;
+		times_3 = length / 3;
+
+		if (length - 3 * times_3 == 1) { times_3--; }
+
+		times_2 = (length - 3 * times_3) / 2;
+
+		maxMulti = static_cast<int>(pow(3, times_3)*pow(2, times_2));
+
+		while (times_2--) { factor.push_back(2); }
+		while (times_3--) { factor.push_back(3); }
+
+		return maxMulti;
+	}
+}
 
 
 int main(void)
