@@ -1,9 +1,3 @@
-/*
-给你一根长度为n 的绳子，请把绳子剪成m 段（m，n 都是整数，n>1 并且m>1），
-每段绳子的长度记为k[0], k[1], …, k[m]。请问k[0] k[1] … k[m]可能的最大乘积是多少？
-
-例如，当绳子的长度是8 时，我们把它剪成长度分别为2，3，3 的三段，此时得到的最大乘积是18
-*/
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -14,6 +8,8 @@ using namespace std;
 int maxDivide_dp(int length)
 {
 	int maxMulti = 1;
+
+	//特殊处理边界情况
 	if (length == 2)
 	{
 		maxMulti = 1;
@@ -29,7 +25,9 @@ int maxDivide_dp(int length)
 		dp[2] = 2;
 		dp[3] = 3;
 
-		int maxthis;
+		int maxthis;		//记录每一轮的最大值
+
+		/* f(x) = max{f(i)*f(n-i)}  0<i<n */
 		for (int i = 4; i <= length; ++i)
 		{
 			maxthis = 0;
@@ -37,7 +35,7 @@ int maxDivide_dp(int length)
 			{
 				maxthis = max(maxthis, dp[j] * dp[i - j]);
 			}
-			dp[i] = maxthis;
+			dp[i] = maxthis;		//更新动态规划存储数组
 		}
 
 		maxMulti = dp[length];
@@ -63,14 +61,15 @@ int maxDivide_dp(int length, vector<int> &factor)
 	}
 	else
 	{
-		vector<vector<int> >dp_factor(length + 1);
+		vector<vector<int> >dp_factor(length + 1);	//row => 每一个长度, col => 每一个长度的最优分解情况
 		vector<int> dp(length + 1, 0);
+
+		/*边界条件*/
 		dp[1] = 1; dp_factor[1].push_back(1);
 		dp[2] = 2; dp_factor[2].push_back(2);
 		dp[3] = 3; dp_factor[3].push_back(3);
 
-
-		int maxindex, maxthis;
+		int maxindex, maxthis;		//取得最大值时j的编号, 每一轮的最大值
 		for (int i = 4; i <= length; ++i)
 		{
 			maxthis = 0;
@@ -84,16 +83,16 @@ int maxDivide_dp(int length, vector<int> &factor)
 				}
 			}
 			dp[i] = maxthis;
-			dp_factor[i].insert(dp_factor[i].end(), dp_factor[maxindex].begin(), dp_factor[maxindex].end());
-			dp_factor[i].insert(dp_factor[i].end(), dp_factor[i-maxindex].begin(), dp_factor[i-maxindex].end());
+			dp_factor[i].insert(dp_factor[i].end(), dp_factor[maxindex].begin(), dp_factor[maxindex].end());		//将f(i)的最佳分解并入f(n)的因子
+			dp_factor[i].insert(dp_factor[i].end(), dp_factor[i-maxindex].begin(), dp_factor[i-maxindex].end());	//将f(n-i)的最佳分解并入f(n)的因子
 		}
 
 		maxMulti = dp[length];
 		factor.resize(dp_factor[length].size());
-		copy(dp_factor[length].begin(), dp_factor[length].end(), factor.begin());
+		copy(dp_factor[length].begin(), dp_factor[length].end(), factor.begin());	//将长为length的因子放到原始数组中
 	}
 
-	sort(factor.begin(), factor.end());
+	sort(factor.begin(), factor.end());		//由于是分别将f(i)和f(n-i)的因子压入, 导致可能使的factor数组乱序
 	return maxMulti;
 }
 
@@ -104,13 +103,13 @@ int maxDivide_gready(int length)
 	else
 	{
 		int maxMulti, times_3, times_2;
-		times_3 = length / 3;
+		times_3 = length / 3;		//尽可能的拆分成3
 
-		if (length - 3 * times_3 == 1) { times_3--; }
+		if (length - 3 * times_3 == 1) { times_3--; }	//如果最后剩余值是4, 拆解成2+2的价值(4)比1+3的价值高(3)
 
-		times_2 = (length - 3 * times_3) / 2;
+		times_2 = (length - 3 * times_3) / 2;	//剩余值拆解成2
 
-		maxMulti = static_cast<int>(pow(3, times_3)*pow(2, times_2));
+		maxMulti = static_cast<int>(pow(3, times_3)*pow(2, times_2));	//返回这些3和2的乘积值
 
 		return maxMulti;
 	}
@@ -140,13 +139,12 @@ int maxDivide_gready(int length, vector<int> &factor)
 
 		maxMulti = static_cast<int>(pow(3, times_3)*pow(2, times_2));
 
-		while (times_2--) { factor.push_back(2); }
-		while (times_3--) { factor.push_back(3); }
+		while (times_2--) { factor.push_back(2); }		//将若干2压入因子向量中
+		while (times_3--) { factor.push_back(3); }		//将若干3压入因子向量中
 
 		return maxMulti;
 	}
 }
-
 
 int main(void)
 {
