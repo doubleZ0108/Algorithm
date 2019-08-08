@@ -84,5 +84,101 @@ for (int i=arr.size()-1;i>0;--i)
 
 ## 算法应用
 
+### 扫雷生成随机棋盘
+
+- 将二维棋盘看作👀是一维的一横行
+- 先把k个雷从开始出接次排列
+- 使用Knuth洗牌算法执行一次
+- 得到随机棋盘
+
+#### PyQt实现
+
+- 棋盘为 20 * 20, 雷总数为50个
+- 雷用数字1 和 红色背景标示
+- 初始时刻所有雷从最前面依次排开
+- 双击屏幕空白位置(非按钮), 进行一次洗牌
+
+##### 代码实现
+
+**生成初始棋盘**
+
+棋盘物理上是一维的, 但是当作二维的样子使用
+
+```python
+'''生成初始棋盘（默认所有雷都在最前面依次排列）'''
+def grow_board(self):
+  board = [0 for _ in range(self._boardSize ** 2)]
+  for i in range(self._mineNum):
+    board[i] = 1
+    return board
+```
+
+**生成初始布局**
+
+- 定义栅格布局, 并定义20 * 20个格子
+- 初始时根据棋盘添加400个button
+- 根据board此处的值设定button的样式
+
+```python
+'''生成初始布局'''
+def buildGrid(self):
+  self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+  self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 600, 610))
+  self.gridLayoutWidget.setStyleSheet("background-color: rgb(0, 0, 0);")
+
+  self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+
+  # 根据位置和棋盘上的内容构建button
+  for position, name in zip(self._positions, self._board):
+    button = QtWidgets.QPushButton(str(name))
+
+    if name == 1:   # 雷
+      button.setStyleSheet("background-color: rgb(230, 50, 36);")
+
+      else:
+        button.setStyleSheet("background-color: rgb(160, 160, 160);")
+
+        self.gridLayout.addWidget(button, *position)  # 放到布局里
+```
+
+**双击界面**
+
+- 调用洗牌算法
+- 更新布局
+
+**更新布局**
+
+- 删掉布局中所有按钮
+- 重新按照board添加
+
+```python
+'''生成初始布局'''
+def buildGrid(self):
+  self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+  self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 600, 610))
+  self.gridLayoutWidget.setStyleSheet("background-color: rgb(0, 0, 0);")
+
+  self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+
+  # 根据位置和棋盘上的内容构建button
+  for position, name in zip(self._positions, self._board):
+    button = QtWidgets.QPushButton(str(name))
+
+    if name == 1:   # 雷
+      button.setStyleSheet("background-color: rgb(230, 50, 36);")
+
+      else:
+        button.setStyleSheet("background-color: rgb(160, 160, 160);")
+
+        self.gridLayout.addWidget(button, *position)  # 放到布局里
+```
 
 
+
+##### 初始时刻
+
+![屏幕快照 2019-08-08 21.57.19.png](https://upload-images.jianshu.io/upload_images/12014150-47021ead71d4ff5b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+##### 洗牌
+
+![Mine-Sweeper_1.gif](https://upload-images.jianshu.io/upload_images/12014150-fa28f8b9149dc76f.gif?imageMogr2/auto-orient/strip)
