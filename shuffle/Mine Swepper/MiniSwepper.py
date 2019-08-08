@@ -9,9 +9,14 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
         super(mywindow, self).__init__()
         self.setupUi(self)
 
+    '''鼠标双击屏幕事件（非按钮部分）'''
     def mouseDoubleClickEvent(self, event):
         print('double click...')
-        self.shuffle()
+
+        # 调用洗牌算法
+        self.myshuffle()
+
+        # 更新布局
         self.refreshGrid()
 
 
