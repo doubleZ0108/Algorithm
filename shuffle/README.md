@@ -223,13 +223,13 @@ def buildGrid(self):
 
 ##### 初始时刻
 
-![屏幕快照 2019-08-08 21.57.19.png](https://upload-images.jianshu.io/upload_images/12014150-47021ead71d4ff5b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![屏幕快照 2019-08-08 21.57.19.png](ScreenShots/python.png)
 
 <a name="1洗牌"></a>
 
 ##### 洗牌
 
-![Mine-Sweeper_1.gif](https://upload-images.jianshu.io/upload_images/12014150-fa28f8b9149dc76f.gif?imageMogr2/auto-orient/strip)
+![Mine-Sweeper_1.gif](ScreenShots/python.gif)
 
 
 
@@ -303,10 +303,10 @@ function buildTable() {
 
 ##### 初始时刻
 
-![屏幕快照 2019-08-09 09.37.26.png](https://upload-images.jianshu.io/upload_images/12014150-99bbb54178c05cab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![屏幕快照 2019-08-09 09.37.26.png](ScreenShots/html.png)
 
 <a name="2洗牌"></a>
 
 ##### 洗牌
 
-![Mine Sweeper_js.gif](https://upload-images.jianshu.io/upload_images/12014150-d55ba4fb3268cc37.gif?imageMogr2/auto-orient/strip)
+![Mine Sweeper_js.gif](ScreenShots/html.gif)
