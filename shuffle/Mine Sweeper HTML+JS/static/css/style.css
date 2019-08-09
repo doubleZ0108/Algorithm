@@ -1,0 +1,23 @@
+h1,h2,p{
+    text-align: center;
+}
+
+
+#mine-table{
+    /*这两个设置表格居中，并且文字也居中*/
+    margin: auto;
+    text-align: center;
+
+    margin-top: 50px;
+    height: 500px;
+    width: 500px;
+}
+
+/*雷*/
+.mine{
+    background-color: red;
+}
+/*非雷的位置*/
+.no-mine{
+    background-color: white;
+}
