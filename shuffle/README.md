@@ -182,3 +182,77 @@ def buildGrid(self):
 ##### 洗牌
 
 ![Mine-Sweeper_1.gif](https://upload-images.jianshu.io/upload_images/12014150-fa28f8b9149dc76f.gif?imageMogr2/auto-orient/strip)
+
+
+
+#### HTML + JavaScript 实现
+
+##### 代码实现
+
+**生成初始棋盘**
+
+```javascript
+window.onload = function () {
+  //初始化棋盘数组
+  let i=0;
+  for(;i<mineNum;++i){
+    board[i] = 1;
+  }
+  for(;i<board.length;++i){
+    board[i] = 0;
+  }
+
+  //根据棋盘数组构建表格
+  buildTable()
+}
+```
+
+**构建表格 & 更新表格**
+
+- 构建一个table标签🏷️
+- 首先清空table中的内容
+- 创建boardSize行, 每行创建boardSize个表格项
+  - 表格项的值为棋盘上对应的值
+  - 如果该处为雷，则将表格项的类设置为mine; 否则为no-mine
+
+```html
+<table id="mine-table" border="1">
+
+</table>
+```
+
+```javascript
+function buildTable() {
+  let mine_table = document.getElementById('mine-table');
+  mine_table.innerHTML = '';      //清空table内容
+
+  for(let i=0;i<boardSize;++i){
+    let row = document.createElement('tr');     //创建一个行元素
+    for(let j=0;j<boardSize;++j){
+      let elem = document.createElement('td');    //在行中创建boardSize个表格项
+
+      let value = board[i*boardSize + j];
+      elem.innerText = String(value);         //表格项的值为棋盘上对应的值
+      if (value===1){     //如果该处为雷，则将表格项的类设置为mine
+        elem.className = 'mine';
+      }else{
+        elem.className = 'no-mine';
+      }
+
+      row.appendChild(elem);
+    }
+    mine_table.appendChild(row);
+  }
+
+}
+```
+
+
+
+##### 初始时刻
+
+![屏幕快照 2019-08-09 09.37.26.png](https://upload-images.jianshu.io/upload_images/12014150-99bbb54178c05cab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+##### 洗牌
+
+![Mine Sweeper_js.gif](https://upload-images.jianshu.io/upload_images/12014150-d55ba4fb3268cc37.gif?imageMogr2/auto-orient/strip)
