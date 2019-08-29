@@ -47,20 +47,7 @@ void bucket_stack_clear(void) {
 	bucket_stack_index = -1;
 }
 
-bool check_exp(char* exp) {
-	char ch = '\0';
 
-	for (int i = 0; i < strlen(exp); ++i) {
-		if (exp[i] == '(') {
-			bucket_stack_push('(');
-		}
-		else if (exp[i] == ')') {
-			ch = bucket_stack_pop();
-			if (ch == EMPTY_CH || ch != '(') { return False; }
-		}
-	}
-	return isempty_bucket_stack();
-}
 
 
 /*============ 操作数栈 ============*/
@@ -230,8 +217,7 @@ struct Data NextContent(char* exp)
 		if (ch != ' ')
 		{
 			_next[index] = ch;
-			index++;
-			//因为不同对象以空格隔开,所以只要不是空格就加到_next
+			index++;	//因为不同对象以空格隔开,所以只要不是空格就加到_next
 		}
 		else
 		{
@@ -283,6 +269,7 @@ int Cal(int left, char op, int right)
 
 /*============ 输出后缀表达式 ============*/
 void showBackMode(struct Data result[], int size) {
+	printf("The reverse polish notation is: ");
 	for (int i = 0; i < size; ++i) {
 		if (result[i].flag == 0) {
 			printf("%c ", result[i].data);
@@ -311,10 +298,10 @@ int calResult(struct Data result[], int size)
 	return num_stack_pop();
 }
 
-/*============ 表达式美化 ============*/
-void beauty(char* origin_exp)
-//在输入的表达式运算符之间添加空格进行美化和方便处理
-{
+
+
+int calculate(char* origin_exp, bool if_showrev, bool if_beauty) {
+	/*============ 表达式美化 ============*/
 	char exp[100] = "\0";
 	int pos = 0;
 	for (int i = 0; i < strlen(origin_exp); ++i) {
@@ -331,28 +318,11 @@ void beauty(char* origin_exp)
 			++pos;
 		}
 	}
-
-	origin_exp = exp;
-}
-
-
-
-int calculate(char* origin_exp) {
 	
-	beauty(origin_exp);
-	char *exp = origin_exp;
-
-	/*判断表达式括号是否匹配*/
-	bucket_stack_clear();
-	if (!check_exp(exp)) {
-		printf("Buckets in the exprssion you input do not match.\n");
-		printf("Please check the expression and try again.\n");
-		return EMPTY_NUM;
-	}
-
 	/*初始两个栈*/
 	num_stack_clear();
 	op_stack_clear();
+	_current = 0;
 
 	struct Data result[100];
 	int index = 0;
@@ -365,18 +335,18 @@ int calculate(char* origin_exp) {
 	while (!isempty_op_stack()) {
 		char ch = elem.data;
 
-		if (elem.flag == 1) {
+		if (elem.flag == 1) {		//如果是操作数, 直接读入下一个内容
 			result[index] = elem;
 			index++;
 			elem = NextContent(exp);
 		}
-		else if (elem.flag == 0) {
+		else if (elem.flag == 0) {	//如果是操作符,判断ch的优先级icp和当前栈顶操作符的优先级isp
 			char topch = op_stack_top();
-			if (isp(topch) < icp(ch)) {
+			if (isp(topch) < icp(ch)) {		//当前操作符优先级大,将ch压栈,读入下一个内容
 				op_stack_push(ch);
 				elem = NextContent(exp);
 			}
-			else if (isp(topch) > icp(ch)) {
+			else if (isp(topch) > icp(ch)) {	//当前优先级小,推展并输出到结果中
 				struct Data buf;
 				buf.data = op_stack_pop();
 				buf.flag = 0;
@@ -384,7 +354,7 @@ int calculate(char* origin_exp) {
 				index++;
 			}
 			else {
-				if (op_stack_top() == '(') {
+				if (op_stack_top() == '(') {	//如果退出的是左括号则读入下一个内容
 					elem = NextContent(exp);
 				}
 				op_stack_pop();
@@ -392,25 +362,67 @@ int calculate(char* origin_exp) {
 		}
 	}
 
-	showBackMode(result, index);
+	if (if_showrev) {
+		showBackMode(result, index);
+	}
 
 	return calResult(result, index);
 }
 
+/*判断表达式括号是否匹配*/
+bool check_exp_bucket(char* exp) {
+	char ch = '\0';
 
+	for (int i = 0; i < strlen(exp); ++i) {
+		if (exp[i] == '(') {
+			bucket_stack_push('(');
+		}
+		else if (exp[i] == ')') {
+			ch = bucket_stack_pop();
+			if (ch == EMPTY_CH || ch != '(') { 
+				printf("Buckets in the exprssion you input do not match.\n");
+				return False; 
+			}
+		}
+	}
+	return isempty_bucket_stack();
+}
+/*判断表达式是否有非法符号*/
+bool check_exp_notion(char* exp) {
+	for (int i = 0; i < strlen(exp); ++i) {
+		if (!isDigit(exp[i]) && !isOperator(exp[i])) {
+			printf("The operator we support: [+-*/()], you have input %c.\n", exp[i]);
+			return False;
+		}
+	}
+	return True;
+}
 
 int main(void)
 {
-	char exp[100] = "\0";
-	gets(exp);
+	while (1)
+	{
+		char exp[100] = "\0";
+		gets(exp);
 
-	int result = calculate(exp);
-	if (result != EMPTY_NUM) {
-		printf("The result is %d\n", result);
+		if (!check_exp_notion) {
+			printf("Please check the expression and try again.");
+		}
+
+		bucket_stack_clear();
+		if (!check_exp_bucket(exp)) {
+			printf("Please check the expression and try again.\n");
+		}
+
+		int result = calculate(exp, True, True);
+		if (result != EMPTY_NUM) {
+			printf("The result is %d\n", result);
+		}
+		else {
+			printf("You can input [help] to know more.\n");
+		}
 	}
-	else {
-		printf("You can input [help] to know more.\n");
-	}
+	
 
 	system("pause");
 	return 0;
